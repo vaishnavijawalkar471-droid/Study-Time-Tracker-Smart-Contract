@@ -1,10 +1,49 @@
-# Study-Time-Tracker-Smart-Contract
-A beginner-friendly Rust smart contract that helps students track their study hours!
-#What Does This Do?
-This is a simple contract where students can:
-1. Track how many hours they've studied
-2.Add study buddies who can also log study time
-3.Remove incorrect entries
-4.Reset hours for a new week or semester
+// Study Time Tracker - Track your study hours
+pub struct StudyTracker {
+    hours: i32,
+    student: String,
+}
 
-It is  a shared study log where you and your friends can keep each other accountable!
+impl StudyTracker {
+    pub fn new(student: String) -> Self {
+        StudyTracker { hours: 0, student }
+    }
+
+    pub fn log_hour(&mut self, caller: &String) -> Result<i32, String> {
+        if caller != &self.student {
+            return Err("Not your tracker".to_string());
+        }
+        self.hours += 1;
+        Ok(self.hours)
+    }
+
+    pub fn get_hours(&self) -> i32 {
+        self.hours
+    }
+
+    pub fn reset(&mut self, caller: &String) -> Result<(), String> {
+        if caller != &self.student {
+            return Err("Not your tracker".to_string());
+        }
+        self.hours = 0;
+        Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_works() {
+        let student = "Sarah".to_string();
+        let mut tracker = StudyTracker::new(student.clone());
+
+        assert_eq!(tracker.log_hour(&student).unwrap(), 1);
+        assert_eq!(tracker.log_hour(&student).unwrap(), 2);
+        assert_eq!(tracker.get_hours(), 2);
+        
+        tracker.reset(&student).unwrap();
+        assert_eq!(tracker.get_hours(), 0);
+    }
+}
