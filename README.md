@@ -1,49 +1,28 @@
-// Study Time Tracker - Track your study hours
-pub struct StudyTracker {
-    hours: i32,
-    student: String,
-}
+# Study Time Tracker – Rust Smart Contract
 
-impl StudyTracker {
-    pub fn new(student: String) -> Self {
-        StudyTracker { hours: 0, student }
-    }
+A beginner-friendly Rust smart contract that helps students track their study hours securely.
 
-    pub fn log_hour(&mut self, caller: &String) -> Result<i32, String> {
-        if caller != &self.student {
-            return Err("Not your tracker".to_string());
-        }
-        self.hours += 1;
-        Ok(self.hours)
-    }
+## What it does
+- Tracks total study hours for a student
+- Only the owner (student) can update or reset hours
+- Prevents unauthorized access
 
-    pub fn get_hours(&self) -> i32 {
-        self.hours
-    }
+## Design choices
+- Uses ownership-based access control
+- Simple state structure for clarity
+- Explicit error handling using Result
 
-    pub fn reset(&mut self, caller: &String) -> Result<(), String> {
-        if caller != &self.student {
-            return Err("Not your tracker".to_string());
-        }
-        self.hours = 0;
-        Ok(())
-    }
-}
+## State & flow
+- Contract initializes with 0 hours
+- `log_hour` increments study time
+- `reset` clears hours (owner only)
+- `get_hours` returns current value
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+## Security considerations
+- Caller verification before state mutation
+- Prevents unauthorized updates
 
-    #[test]
-    fn it_works() {
-        let student = "Sarah".to_string();
-        let mut tracker = StudyTracker::new(student.clone());
-
-        assert_eq!(tracker.log_hour(&student).unwrap(), 1);
-        assert_eq!(tracker.log_hour(&student).unwrap(), 2);
-        assert_eq!(tracker.get_hours(), 2);
-        
-        tracker.reset(&student).unwrap();
-        assert_eq!(tracker.get_hours(), 0);
-    }
-}
+## Possible improvements
+- Support multiple students
+- Add timestamps for sessions
+- Role-based access
