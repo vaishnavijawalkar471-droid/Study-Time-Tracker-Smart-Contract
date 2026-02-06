@@ -45,5 +45,5 @@ mod tests {
         
         tracker.reset(&student).unwrap();
         assert_eq!(tracker.get_hours(), 0);
-    }
+    }       
 }
