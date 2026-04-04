@@ -3,7 +3,7 @@
 A beginner-friendly Rust smart contract that helps students track their study hours securely.
 
 ## What it does
-- Tracks total study hours for a student
+- Tracks total study hours for a student 
 - Only the owner (student) can update or reset hours
 - Prevents unauthorized access
 
